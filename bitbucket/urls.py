@@ -1,4 +1,4 @@
-_BASE_URL_V1 = 'https://bitbucket.org/!api/1.0/%s'
+_BASE_URL_V1 = 'https://bitbucket.org/api/1.0/%s'
 _BASE_URL_V2 = 'https://api.bitbucket.org/2.0/%s'
 
 def request_token_url():
