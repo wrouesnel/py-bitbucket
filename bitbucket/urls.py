@@ -16,8 +16,8 @@ def current_user_url():
   """ URL for retrieving the current authorized user. """
   return _BASE_URL_V2 % 'user'
 
-def current_user_repos_url():
-  """ URL for retrieving the repositories viewable by the current user. """
+def repositories_url():
+  """ URL for retrieving repositories """
   return _BASE_URL_V2 % 'repositories'
 
 def repository_branches_url(namespace, repository):
@@ -59,14 +59,6 @@ def repository_links_url(namespace, repository):
 def repository_link_url(namespace, repository, link_id):
   """ Returns the contents of a link under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/links/%s' % (namespace, repository, link_id))
-
-def repository_services_url(namespace, repository):
-  """ Returns the list of services in a repository. """
-  return _BASE_URL_V2 % ('repositories/%s/%s/services' % (namespace, repository))
-
-def repository_service_url(namespace, repository, service_id):
-  """ Returns the contents of a service under a repository. """
-  return _BASE_URL_V2 % ('repositories/%s/%s/services/%s' % (namespace, repository, service_id))
 
 def repository_main_branch_url(namespace, repository):
   """ Returns the name of the main branch for the repository. """

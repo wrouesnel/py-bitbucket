@@ -1,6 +1,6 @@
 """ Defines a client class for working with BitBucket with a set of auth credentials. """
 
-from bitbucket.urls import current_user_url, current_user_repos_url
+from bitbucket.urls import current_user_url, repositories_url
 from bitbucket.namespace import BitBucketNamespaceClient
 from bitbucket.accounts import BitBucketAccountsClient
 
@@ -19,9 +19,9 @@ class BitBucketClient(object):
 
   def get_visible_repositories(self):
     """ Returns a list of all repositories visible to the authorized user. """
-    url = current_user_repos_url()
+    url = repositories_url()
     return self._dispatcher.dispatch(url, access_token=self._access_token,
-                                          access_token_secret=self._access_token_secret)
+                                          access_token_secret=self._access_token_secret, params={"role" : "member"})
 
   def for_namespace(self, namespace):
     """ Returns a client for accessing information for the given user or team. """

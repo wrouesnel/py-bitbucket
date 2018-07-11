@@ -52,11 +52,16 @@ class BitBucket(object):
       data = json.dumps(data)
 
     result_json = None
-    values = []
+    result = None
 
     while result_json is None or 'next' in result_json:
       session = Session()
-      request = Request(method=method, url=api_url, auth=auth, params=params, data=data,
+      if result_json is None:
+        url = api_url
+      else:
+        url = result_json['next']
+      request = Request(method=method, url=url,
+                        auth=auth, params=params, data=data,
                         headers=headers)
 
       try:
@@ -73,11 +78,20 @@ class BitBucket(object):
       # 200-299: OK.
       if status_code / 100 == 2:
         # TODO: wrap the exception
-        result_json = json.loads(text or '')
+        result_json = response.json()
+        # Detect pagination API...
+        if 'values' in result_json:
+          if result is None:
+            result = []
+          result.extend(result_json['values'])
+        else:
+          result = result_json
+          if 'next' in result_json:
+            raise ValueError("got 'next' in field for non-pagination based API")
       else:
         return (False, None, error or 'Error: %s' % status_code)
 
-    return (True, values, None)
+    return (True, result, None)
 
   def _get_request_token(self):
     """ Retrieves a request token from the BitBucket API endpoint. Returns a tuple containing
