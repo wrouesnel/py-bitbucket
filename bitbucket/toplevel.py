@@ -17,22 +17,30 @@ from bitbucket.client import BitBucketClient
 
 class BitBucket(object):
   """ This is the main class for interacting with the BitBucket API (V1). """
-  def __init__(self, consumer_key, consumer_secret, callback_url, timeout=None):
+  def __init__(self, consumer_key, consumer_secret, callback_url, timeout=None, auth=None):
     self._consumer_key = consumer_key
     self._consumer_secret = consumer_secret
     self._callback_url = callback_url
     self._timeout = timeout
+    self._auth = auth
 
   def get_authorized_client(self, access_token, access_token_secret):
     """ Returns a client for talking to an authorized endpoint. """
     return BitBucketClient(self, access_token, access_token_secret)
 
 
+  def _get_dispatch_oauth(self, access_token, access_token_secret):
+    oauth = OAuth1(self._consumer_key, client_secret=self._consumer_secret,
+                   resource_owner_key=access_token, resource_owner_secret=access_token_secret)
+    return oauth
+
   def dispatch(self, api_url, access_token, access_token_secret, method='GET', params=None,
                json_body=False, **kwargs):
     """ Dispatches a signed request to the given URL, with the given access token and secret. """
-    oauth = OAuth1(self._consumer_key, client_secret=self._consumer_secret,
-                   resource_owner_key=access_token, resource_owner_secret=access_token_secret)
+    if self._auth is None:
+      auth = self._get_dispatch_oauth(access_token, access_token_secret)
+    else:
+      auth = self._auth
 
     data = kwargs
     headers = {}
@@ -42,7 +50,7 @@ class BitBucket(object):
       data = json.dumps(data)
 
     session = Session()
-    request = Request(method=method, url=api_url, auth=oauth, params=params, data=data,
+    request = Request(method=method, url=api_url, auth=auth, params=params, data=data,
                       headers=headers)
 
     try:
