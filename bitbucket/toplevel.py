@@ -34,6 +34,8 @@ class BitBucket(object):
                    resource_owner_key=access_token, resource_owner_secret=access_token_secret)
     return oauth
 
+
+
   def dispatch(self, api_url, access_token, access_token_secret, method='GET', params=None,
                json_body=False, **kwargs):
     """ Dispatches a signed request to the given URL, with the given access token and secret. """
@@ -49,34 +51,33 @@ class BitBucket(object):
       headers['Content-Type'] = 'application/json'
       data = json.dumps(data)
 
-    session = Session()
-    request = Request(method=method, url=api_url, auth=auth, params=params, data=data,
-                      headers=headers)
+    result_json = None
+    values = []
 
-    try:
-      response = session.send(request.prepare(), timeout=self._timeout)
-    except requests.exceptions.ReadTimeout:
-      return (False, None, 'Timeout when contacting BitBucket')
-    except requests.exceptions.RequestException as rex:
-      return (False, None, 'Exception when contacting BitBucket: %s' % rex.message)
+    while result_json is None or 'next' in result_json:
+      session = Session()
+      request = Request(method=method, url=api_url, auth=auth, params=params, data=data,
+                        headers=headers)
 
-    status_code = response.status_code
-    text = response.text
-    error = response.reason
-
-    # 200-299: OK.
-    if status_code / 100 == 2:
       try:
-        return (True, json.loads(text or ''), None)
-      except TypeError:
-        pass
-      except ValueError:
-        pass
+        response = session.send(request.prepare(), timeout=self._timeout)
+      except requests.exceptions.ReadTimeout:
+        return (False, None, 'Timeout when contacting BitBucket')
+      except requests.exceptions.RequestException as rex:
+        return (False, None, 'Exception when contacting BitBucket: %s' % rex.message)
 
-      return (True, text, None)
+      status_code = response.status_code
+      text = response.text
+      error = response.reason
 
-    return (False, None, error or 'Error: %s' % status_code)
+      # 200-299: OK.
+      if status_code / 100 == 2:
+        # TODO: wrap the exception
+        result_json = json.loads(text or '')
+      else:
+        return (False, None, error or 'Error: %s' % status_code)
 
+    return (True, values, None)
 
   def _get_request_token(self):
     """ Retrieves a request token from the BitBucket API endpoint. Returns a tuple containing
