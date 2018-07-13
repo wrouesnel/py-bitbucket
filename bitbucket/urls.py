@@ -20,6 +20,10 @@ def repositories_url():
   """ URL for retrieving repositories """
   return _BASE_URL_V2 % 'repositories'
 
+def repositories_for_namespace_url(namespace):
+  """ URL for retrieving repositories """
+  return _BASE_URL_V2 % 'repositories/%s' % namespace
+
 def repository_branches_url(namespace, repository):
   """ URL for retrieiving the branches under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/branches' % (namespace, repository))
@@ -59,6 +63,10 @@ def repository_links_url(namespace, repository):
 def repository_link_url(namespace, repository, link_id):
   """ Returns the contents of a link under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/links/%s' % (namespace, repository, link_id))
+
+def repository_forks_url(namespace, repository):
+  """ Returns the contents of a link under a repository. """
+  return _BASE_URL_V2 % ('repositories/%s/%s/forks' % (namespace, repository))
 
 def repository_main_branch_url(namespace, repository):
   """ Returns the name of the main branch for the repository. """

@@ -1,5 +1,6 @@
 """ Defines a client class for working with BitBucket repositories. """
 
+from bitbucket.urls import repositories_for_namespace_url
 from bitbucket.repository import BitBucketRepositoryClient
 
 class BitBucketRepositoriesClient(object):
@@ -14,6 +15,13 @@ class BitBucketRepositoriesClient(object):
   def namespace(self):
     """ Returns the namespace. """
     return self._namespace
+
+  def __iter__(self):
+    url = repositories_for_namespace_url(self.namespace)
+    sucess, data, error = self._dispatcher.dispatch(url, access_token=self._access_token,
+                              access_token_secret=self._access_token_secret)
+    for repo_data in data:
+      yield self.get(repo_data['name'])
 
   def get(self, repository_name):
     """ Returns a client for interacting with a specific repository. """
