@@ -24,6 +24,10 @@ def repositories_for_namespace_url(namespace):
   """ URL for retrieving repositories """
   return _BASE_URL_V2 % 'repositories/%s' % namespace
 
+def repository_for_namespace_url(namespace, repository):
+  """ URL for repository """
+  return _BASE_URL_V2 % ('repositories/%s/%s' %  (namespace, repository))
+
 def repository_branches_url(namespace, repository):
   """ URL for retrieiving the branches under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/branches' % (namespace, repository))
