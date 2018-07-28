@@ -1,5 +1,4 @@
 """ Defines a client class for working with a specific BitBucket repository. """
-
 from bitbucket.urls import (repository_branches_url, repository_tags_url, repository_branches_tags_url,
                   repository_manifest_url, repository_path_contents_url,
                   repository_path_raw_contents_url, repository_main_branch_url,
@@ -10,6 +9,8 @@ from bitbucket.links import BitBucketRepositoryLinksClient
 from bitbucket.changesets import BitBucketRepositoryChangeSetsClient
 from bitbucket.webhooks import BitBucketRepositoryWebhooksClient
 from bitbucket.forks import BitBucketRepositoryForksClient
+from bitbucket.pipelines_config import BitBucketRepositoryPipelinesConfigClient
+from bitbucket.branch_restrictions import BitBucketRepositoryBranchRestrictionsClient
 
 class BitBucketRepositoryClient(object):
   """ Client class representing a repository in bitbucket. """
@@ -63,6 +64,12 @@ class BitBucketRepositoryClient(object):
   def pipelines_config(self):
     """ Returns a resource for managing the deploy keys under this repository. """
     return BitBucketRepositoryPipelinesConfigClient(self._dispatcher, self._access_token,
+                                               self._access_token_secret, self._namespace,
+                                               self._repository_name)
+
+  def branch_restrictions(self):
+    """ Returns a resource for managing the deploy keys under this repository. """
+    return BitBucketRepositoryBranchRestrictionsClient(self._dispatcher, self._access_token,
                                                self._access_token_secret, self._namespace,
                                                self._repository_name)
 
