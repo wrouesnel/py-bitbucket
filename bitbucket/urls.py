@@ -72,6 +72,18 @@ def repository_forks_url(namespace, repository):
   """ Returns the contents of a link under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/forks' % (namespace, repository))
 
+def repository_pipelines_config_url(namespace, repository):
+  """ Returns the contents of a link under a repository. """
+  return _BASE_URL_V2 % ('repositories/%s/%s/pipelines_config' % (namespace, repository))
+
+def repository_pipelines_config_variables_url(namespace, repository):
+  """ Returns the contents of a link under a repository. """
+  return _BASE_URL_V2 % ('repositories/%s/%s/pipelines_config/variables/' % (namespace, repository))
+
+def repository_pipelines_config_variables_variable_url(namespace, repository, uuid):
+  """ Returns the contents of a link under a repository. """
+  return _BASE_URL_V2 % ('repositories/%s/%s/pipelines_config/variables/%s' % (namespace, repository, uuid))
+
 def repository_main_branch_url(namespace, repository):
   """ Returns the name of the main branch for the repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/main-branch' % (namespace, repository))

@@ -76,7 +76,7 @@ class BitBucket(object):
       error = response.reason
 
       # 200-299: OK.
-      if status_code / 100 == 2:
+      if 200 <= status_code <= 299:
         # TODO: wrap the exception
         result_json = response.json()
         # Detect pagination API...

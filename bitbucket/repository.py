@@ -60,6 +60,12 @@ class BitBucketRepositoryClient(object):
                                                self._access_token_secret, self._namespace,
                                                self._repository_name)
 
+  def pipelines_config(self):
+    """ Returns a resource for managing the deploy keys under this repository. """
+    return BitBucketRepositoryPipelinesConfigClient(self._dispatcher, self._access_token,
+                                               self._access_token_secret, self._namespace,
+                                               self._repository_name)
+
   def get_main_branch(self):
     """ Returns the main branch for this repository. """
     url = repository_main_branch_url(self._namespace, self._repository_name)
