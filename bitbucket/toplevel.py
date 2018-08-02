@@ -89,7 +89,7 @@ class BitBucket(object):
           if 'next' in result_json:
             raise ValueError("got 'next' in field for non-pagination based API")
       else:
-        return (False, None, error or 'Error: %s' % status_code)
+        return (False, None, 'Error: %s %s - %s' % (status_code,error,text))
 
     return (True, result, None)
 

@@ -30,7 +30,8 @@ class BitBucketRepositoryPipelinesConfigVariablesClient(object):
 
   def all(self):
     """ Return all variables in the current repository """
-    url = repository_pipelines_config_variables_url(self._namespace, self._repository_name)
+    # Workaround bug https://bitbucket.org/site/master/issues/16233/api-call-to-environment-variables-end%C2%A0
+    url = repository_pipelines_config_variables_url(self._namespace, self._repository_name) + "?pagelen=100"
     return self._dispatcher.dispatch(url, access_token=self._access_token,
                                           access_token_secret=self._access_token_secret)
 
