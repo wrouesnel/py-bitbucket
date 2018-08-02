@@ -11,6 +11,7 @@ from bitbucket.webhooks import BitBucketRepositoryWebhooksClient
 from bitbucket.forks import BitBucketRepositoryForksClient
 from bitbucket.pipelines_config import BitBucketRepositoryPipelinesConfigClient
 from bitbucket.branch_restrictions import BitBucketRepositoryBranchRestrictionsClient
+from bitbucket.pipelines import BitBucketRepositoryPipelinesClient
 
 class BitBucketRepositoryClient(object):
   """ Client class representing a repository in bitbucket. """
@@ -58,6 +59,12 @@ class BitBucketRepositoryClient(object):
   def deploykeys(self):
     """ Returns a resource for managing the deploy keys under this repository. """
     return BitBucketRepositoryDeployKeysClient(self._dispatcher, self._access_token,
+                                               self._access_token_secret, self._namespace,
+                                               self._repository_name)
+
+  def pipelines(self):
+    """ Returns a resource for managing the deploy keys under this repository. """
+    return BitBucketRepositoryPipelinesClient(self._dispatcher, self._access_token,
                                                self._access_token_secret, self._namespace,
                                                self._repository_name)
 

@@ -80,6 +80,10 @@ def repository_pipelines_config_variables_url(namespace, repository):
   """ Returns the contents of a link under a repository. """
   return _BASE_URL_V2 % ('repositories/%s/%s/pipelines_config/variables/' % (namespace, repository))
 
+def repository_pipelines_url(namespace, repository):
+  """ Returns the contents of a link under a repository. """
+  return _BASE_URL_V2 % ('repositories/%s/%s/pipelines/' % (namespace, repository))
+
 def repository_branch_restrictions_url(namespace, repository):
   """ Returns the branch permissions of a repository """
   return _BASE_URL_V2 % ('repositories/%s/%s/branch-restrictions/' % (namespace, repository))
