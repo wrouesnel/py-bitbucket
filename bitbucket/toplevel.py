@@ -77,8 +77,10 @@ class BitBucket(object):
 
       # 200-299: OK.
       if 200 <= status_code <= 299:
-        # TODO: wrap the exception
-        result_json = response.json()
+        if status_code == 204:
+          result_json = {}
+        else:
+          result_json = response.json()
         # Detect pagination API...
         if 'values' in result_json:
           if result is None:
