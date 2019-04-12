@@ -2,7 +2,7 @@
 from bitbucket.urls import (repository_branches_url, repository_tags_url, repository_branches_tags_url,
                   repository_manifest_url, repository_path_contents_url,
                   repository_path_raw_contents_url, repository_main_branch_url,
-                  repository_branch_url, repository_tag_url)
+                  repository_branch_url, repository_tag_url, repository_for_namespace_url)
 
 from bitbucket.deploykeys import BitBucketRepositoryDeployKeysClient
 from bitbucket.links import BitBucketRepositoryLinksClient
@@ -31,6 +31,15 @@ class BitBucketRepositoryClient(object):
   def repository_name(self):
     """ Returns the repository name. """
     return self._repository_name
+
+  def rename(self, new_name):
+    """ Rename the repository. """
+    url = repository_for_namespace_url(self._namespace, self._repository_name)
+    return self._dispatcher.dispatch(url, access_token=self._access_token,
+                                          access_token_secret=self._access_token_secret,
+                                          json_body=True,
+                                          method="PUT",
+                                          name=new_name)
 
   def changesets(self):
     """ Returns a resource for managing the changesets under this repository. """
